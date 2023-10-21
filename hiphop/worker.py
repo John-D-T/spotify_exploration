@@ -5,6 +5,7 @@ from common.constants.client_info import ClientInfoConstants as cic
 
 
 # TODO - edit the python venv to 3.11
+# Credits to https://towardsdatascience.com/extracting-song-data-from-the-spotify-api-using-python-b1e79388d50 for a solid starting point
 
 def pipeline(playlist_link):
     """
