@@ -1,5 +1,5 @@
 # README
-The 'spotify_exploration' repository's purpose is to explore song data. Using the Spotify API to aid with analysis.
+The 'spotify_exploration' project's purpose is to explore musical data. Here we use the Spotify API to aid with analysis, and focus on using the 'polars' package to process our data.
 
 Ideas include:
 Exploring the popularity of genres over time, and digging into defining characteristics of songs by decade.
