@@ -4,6 +4,7 @@ def worker(df):
     :param df:
     :return:
     """
+    # TODO - add a function which writes the polars dataframe to a .csv
     pass
 
 
