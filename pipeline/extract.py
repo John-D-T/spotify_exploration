@@ -5,12 +5,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from common.constants.client_info import ClientInfoConstants as cic
 
 
-
-# TODO - edit the python venv to 3.11
-# Credits to https://towardsdatascience.com/extracting-song-data-from-the-spotify-api-using-python-b1e79388d50 for a solid starting point
-
-
-def pipeline(playlist_link):
+def worker(playlist_link):
     """
 
     :param playlist_link:
@@ -22,7 +17,9 @@ def pipeline(playlist_link):
 
     track_dict = extract_songs(playlist_link=playlist_link, sp=sp)
 
-    create_polars_dataframe(track_dict=track_dict)
+    df = create_polars_dataframe(track_dict=track_dict)
+
+    return df
 
 
 def extract_songs(playlist_link, sp):
@@ -72,13 +69,11 @@ def extract_songs(playlist_link, sp):
 
     return track_dict
 
+
 def create_polars_dataframe(track_dict):
     df = pl.DataFrame(track_dict)
     return df
 
+
 if __name__ == '__main__':
-    playlist_link = "https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF?si=1333723a6eff4b7f"
-    pipeline(playlist_link=playlist_link)
-
-
-    # TODO - look into this next: https://www.aicrowd.com/challenges/spotify-million-playlist-dataset-challenge
+    pass
