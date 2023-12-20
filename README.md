@@ -1,15 +1,26 @@
 # Music Exploration Project
-The 'spotify_exploration' project's purpose is to explore musical data. Here we primarily use the Spotify API to aid with analysis, and use the 'polars' package to process and transform our data.
+The 'spotify_exploration' project's purpose is to explore musical data. 
+
+Here we primarily use the Spotify API to aid with analysis, and use the 'pandas' package to process and transform our data. We finally load this data into a MySQL database.
 
 The structure of the pipeline follows ETL:
 
-*Extract*: Obtain the relevant data using the Spotify API and other sources. The goal is to obtain data on popular songs, and song lyrics
+*Extract*: 
+
+- Obtain the relevant data using the Spotify API and other sources. The goal is to obtain data on popular songs, and song lyrics
     
-   - Credits to https://towardsdatascience.com/extracting-song-data-from-the-spotify-api-using-python-b1e79388d50 for providing information on how to do this
+- We also run some checks to make sure we haven't already processed data today
+    
+   Note: Credits to https://towardsdatascience.com/extracting-song-data-from-the-spotify-api-using-python-b1e79388d50 for providing information on how to do this
 
-*Transform*: Add necessary watermark columns, derived columns, and perform helpful joins
 
-*Load*: Load the data to either a final .csv or .SQL Table
+*Transform*: 
+
+- Add necessary watermark columns, column type conversions, derived columns, and perform helpful joins
+
+*Load*: 
+
+- Load the data to a table on a MySQL Database
 
 
 Ideas with the data include:
