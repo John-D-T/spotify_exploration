@@ -1,15 +1,14 @@
-import polars as pl
+import pandas as pd
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-from common.constants.client_info import ClientInfoConstants as cic
+from common.constants.hidden_info import ClientInfoConstants as cic
 
 
 def worker(playlist_link):
     """
-
     :param playlist_link:
-    :return:
+    :return: pandas dataframe with relevant information
     """
     # Authentication - without user
     client_credentials_manager = SpotifyClientCredentials(client_id=cic.cid, client_secret=cic.secret)
@@ -17,7 +16,7 @@ def worker(playlist_link):
 
     track_dict = extract_songs(playlist_link=playlist_link, sp=sp)
 
-    df = create_polars_dataframe(track_dict=track_dict)
+    df = create_pandas_dataframe(track_dict=track_dict)
 
     return df
 
@@ -26,14 +25,14 @@ def extract_songs(playlist_link, sp):
     """
 
     :param playlist_link:
-    :param sp:
+    :param sp: spotify api
     :return:
     """
     track_dict = {
         'track_uri': [],
         'track_name': [],
         'artist_uri': [],
-        'artist_info': [],
+        'artist_followers': [],
         'artist_name': [],
         'artist_pop': [],
         'artist_genres': [],
@@ -54,7 +53,9 @@ def extract_songs(playlist_link, sp):
         # Main Artist
         artist_uri = track["track"]["artists"][0]["uri"]
         track_dict['artist_uri'] += [artist_uri]
-        track_dict['artist_info'] += [sp.artist(artist_uri)]
+
+        followers = [sp.artist(artist_uri)][0]['followers']['total']
+        track_dict['artist_followers'] += [followers if followers else 0]
 
         # Name, popularity, genre
         track_dict['artist_name'] += [track["track"]["artists"][0]["name"]]
@@ -70,8 +71,8 @@ def extract_songs(playlist_link, sp):
     return track_dict
 
 
-def create_polars_dataframe(track_dict):
-    df = pl.DataFrame(track_dict)
+def create_pandas_dataframe(track_dict):
+    df = pd.DataFrame(track_dict)
     return df
 
 
