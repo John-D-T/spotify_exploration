@@ -3,13 +3,15 @@ from pipeline.transform import worker as transform_worker
 from pipeline.load import worker as load_worker
 from common.constants.sql_constants import SQLConstants as cc
 
+import datetime
+
 
 def main(playlist_link, table_name, execution_date):
     """
     A wrapper function, which calls several functions:
     1. To pass in the url of the spotify playlist and extract all data on the songs from that playlist into a dataframe.
-    2. Then transform this dataframe into a more comprehensive dataframe (using polars)
-    3. Then load this dataframe into a .csv file or sql table (tbd)
+    2. Transform this dataframe into a more comprehensive dataframe
+    3. Load this dataframe into a MySql table
     :param playlist_link:
     :return:
     """

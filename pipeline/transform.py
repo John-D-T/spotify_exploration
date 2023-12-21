@@ -14,6 +14,8 @@ def worker(df, table_name, execution_date):
     df = add_watermark_columns(df=df, execution_date=execution_date)
     df = convert_typing(df=df, table_name=table_name)
 
+    return df
+
 
 def add_watermark_columns(df, execution_date):
     """

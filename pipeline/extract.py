@@ -1,4 +1,5 @@
 import pandas as pd
+import sys
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -16,8 +17,12 @@ def worker(playlist_link, execution_date, table_name):
     :return: pandas dataframe with relevant information
     """
 
-    duplication_check(execution_date=execution_date, username=hc.username, password=hc.password, database_name=cc.database_name,
+    duplicate_found = duplication_check(execution_date=execution_date, username=hc.username, password=hc.password, database_name=cc.database_name,
                       table_name=table_name)
+
+    if duplicate_found:
+        print(f'Duplicate found for execution date: {execution_date}')
+        sys.exit()
 
     # Authentication - without user
     client_credentials_manager = SpotifyClientCredentials(client_id=cic.cid, client_secret=cic.secret)
@@ -42,14 +47,18 @@ def duplication_check(execution_date, username, password, database_name, table_n
     :return: Boolean value
     """
 
-    query = ''
+    query = f"""
+            SELECT DISTINCT execution_date 
+            FROM {database_name}.{table_name}
+            """
 
     list_of_dates_processed = extract_query(username=username, password=password, database_name=database_name,
                                             table_name=table_name, query=query)
 
+    list_of_dates_processed = [date[0] for date in list_of_dates_processed]
+
     if execution_date in list_of_dates_processed:
         return True
-
     else:
         return False
 

@@ -102,5 +102,9 @@ def extract_query(username, password, database_name, table_name, query):
 
     cursor.execute(query)
 
+    result = cursor.fetchall()
+
     connection.commit()
     connection.close()
+
+    return result
