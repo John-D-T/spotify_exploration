@@ -4,30 +4,18 @@ import uuid
 from pipeline.mappings import column_mappings as cm
 
 
-def worker(df, table_name):
-    """
-    :param df:
-    :return:
-    """
-    df = transform_df_wrapper(df=df, table_name=table_name)
-
-    return df
-
-
-def transform_df_wrapper(df, table_name):
+def worker(df, table_name, execution_date):
     """
     A wrapper function containing all the necessary transformations for the dataframe
 
-    :param df: input dataframe
-    :return: dataframe with all transformations applied
+    :param df:
+    :return:
     """
-
-    df = add_watermark_columns(df=df)
+    df = add_watermark_columns(df=df, execution_date=execution_date)
     df = convert_typing(df=df, table_name=table_name)
-    return df
 
 
-def add_watermark_columns(df):
+def add_watermark_columns(df, execution_date):
     """
     Function which adds watermark columns to the dataframe. These watermark columns include:
     1. An execution timestamp
@@ -37,7 +25,6 @@ def add_watermark_columns(df):
     :param df: input dataframe
     :return: dataframe with watermark columns added
     """
-    execution_date = datetime.date.today().strftime("%d/%m/%Y")
     df['execution_date'] = execution_date
 
     execution_timestamp = datetime.datetime.now()

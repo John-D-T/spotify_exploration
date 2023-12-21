@@ -3,7 +3,7 @@ The 'spotify_exploration' project's purpose is to explore musical data.
 
 Here we primarily use the Spotify API to aid with analysis, and use the 'pandas' package to process and transform our data. We finally load this data into a MySQL database.
 
-The structure of the pipeline follows ETL:
+The structure of the pipeline follows an ETL structure:
 
 *Extract*: 
 
