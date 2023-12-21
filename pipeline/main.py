@@ -6,7 +6,7 @@ from common.constants.sql_constants import SQLConstants as cc
 import datetime
 
 
-def main(playlist_link, table_name, execution_date):
+def full_pipeline(playlist_link, table_name, execution_date):
     """
     A wrapper function, which calls several functions:
     1. To pass in the url of the spotify playlist and extract all data on the songs from that playlist into a dataframe.
@@ -27,4 +27,4 @@ if __name__ == '__main__':
 
     execution_date = datetime.date.today().strftime("%d/%m/%Y")
 
-    main(playlist_link=spotify_global_top_50_songs, table_name=cc.top_50_table_name, execution_date=execution_date)
+    full_pipeline(playlist_link=spotify_global_top_50_songs, table_name=cc.top_50_table_name, execution_date=execution_date)
