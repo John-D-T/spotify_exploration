@@ -15,11 +15,12 @@ def full_pipeline(playlist_link, table_name, execution_date):
     :param playlist_link:
     :return:
     """
-    df = extract_worker(playlist_link=playlist_link, execution_date=execution_date, table_name=table_name)
+
+    df = extract_worker(playlist_link=playlist_link)
 
     transformed_df = transform_worker(df=df, table_name=table_name, execution_date=execution_date)
 
-    load_worker(df=transformed_df, table_name=table_name)
+    load_worker(df=transformed_df, table_name=table_name, execution_date=execution_date)
 
 
 if __name__ == '__main__':

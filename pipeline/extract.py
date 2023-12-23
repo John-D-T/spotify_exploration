@@ -1,28 +1,18 @@
 import pandas as pd
-import sys
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from common.constants.hidden_info import ClientInfoConstants as cic
 
 from common.sql_operations import extract_query
-from common.constants.sql_constants import SQLConstants as cc
-from common.constants.hidden_info import SQLConstants as hc
 
 
-def worker(playlist_link, execution_date, table_name):
+def worker(playlist_link):
     """
 
     :param playlist_link:
     :return: pandas dataframe with relevant information
     """
-
-    duplicate_found = duplication_check(execution_date=execution_date, username=hc.username, password=hc.password, database_name=cc.database_name,
-                      table_name=table_name)
-
-    if duplicate_found:
-        print(f'Duplicate found for execution date: {execution_date}')
-        sys.exit()
 
     # Authentication - without user
     client_credentials_manager = SpotifyClientCredentials(client_id=cic.cid, client_secret=cic.secret)
@@ -35,33 +25,6 @@ def worker(playlist_link, execution_date, table_name):
     return df
 
 
-def duplication_check(execution_date, username, password, database_name, table_name):
-    """
-    partition check on execution_date to avoid reloading the same top 50 charts for a certain day
-
-    :param execution_date:
-    :param username:
-    :param password:
-    :param database_name:
-    :param table_name:
-    :return: Boolean value
-    """
-
-    query = f"""
-            SELECT DISTINCT execution_date 
-            FROM {database_name}.{table_name}
-            """
-
-    list_of_dates_processed = extract_query(username=username, password=password, database_name=database_name,
-                                            table_name=table_name, query=query)
-
-    list_of_dates_processed = [date[0] for date in list_of_dates_processed]
-
-    if execution_date in list_of_dates_processed:
-        return True
-    else:
-        return False
-
 def extract_songs(playlist_link, sp):
     """
 
@@ -70,6 +33,7 @@ def extract_songs(playlist_link, sp):
     :return:
     """
     track_dict = {
+        'ranking': [],
         'track_uri': [],
         'track_name': [],
         'artist_uri': [],
@@ -84,7 +48,10 @@ def extract_songs(playlist_link, sp):
     playlist_URI = playlist_link.split("/")[-1].split("?")[0]
     track_object = sp.playlist_tracks(playlist_URI)["items"]
 
-    for track in track_object:
+    for ranking, track in enumerate(track_object):
+        # Ranking
+        track_dict['ranking'] += [ranking + 1]
+
         # URI
         track_dict['track_uri'] += [track["track"]["uri"]]
 

@@ -1,5 +1,6 @@
 tables_to_convert = {
     "top_50_global":  {
+        "ranking": "int64",
         "track_uri": "string",
         "track_name": "string",
         "artist_uri": "string",

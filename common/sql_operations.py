@@ -48,7 +48,7 @@ def generate_create_table_statement(df, database_name, table_name):
     column_dtypes = str(df.dtypes).split('\n')[:-1]
 
     pandas_to_sql_type_conversion = {
-        "string": "VARCHAR(100)",
+        "string": "VARCHAR(140)",
         "int64": "BIGINT",
         "datetime64[ns]": "TIMESTAMP"
     }
@@ -69,12 +69,14 @@ def generate_create_table_statement(df, database_name, table_name):
 
 def insert_spotify_data(db, table_name, df, user, pw):
     """
-    Function to insert dataframe collected from the spotify API into our MySQL table.
+        Function to insert dataframe collected from the spotify API into our MySQL table.
 
+    :param db:
+    :param table_name:
     :param df:
-    :param cursor:
-    :param table_name: table we're inserting into
-    :return: N/A
+    :param user:
+    :param pw:
+    :return:
     """
     engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
                            .format(host='localhost:3306', db=db, user=user, pw=pw))
@@ -108,3 +110,31 @@ def extract_query(username, password, database_name, table_name, query):
     connection.close()
 
     return result
+
+def duplication_check(execution_date, username, password, database_name, table_name):
+    """
+    partition check on execution_date to avoid reloading the same top 50 charts for a certain day
+
+    :param execution_date:
+    :param username:
+    :param password:
+    :param database_name:
+    :param table_name:
+    :return: Boolean value
+    """
+
+    query = f"""
+            SELECT DISTINCT execution_date 
+            FROM {database_name}.{table_name}
+            """
+
+    list_of_dates_processed = extract_query(username=username, password=password, database_name=database_name,
+                                            table_name=table_name, query=query)
+
+    list_of_dates_processed = [date[0] for date in list_of_dates_processed]
+
+    if execution_date in list_of_dates_processed:
+        return True
+    else:
+        return False
+
