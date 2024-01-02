@@ -1,7 +1,9 @@
 """
 apache-airflow version: 2.7.3
 
-Steps to initialize and start airflow:
+Steps to initialize and start airflow (on WSL - ubuntu in my case)
+
+source airflow-venv/bin/activate
 
 airflow db init
     - initializes airflow db
@@ -16,13 +18,18 @@ airflow scheduler
 
 airflow users  create --role Admin --username admin --email admin --firstname admin --lastname admin --password admin
     - Creating your first user
+
+check http://localhost:8080
+
+airflow.cfg contains the path to your DAGs
+
+Note: in WSL, you can open up the file explorer using:
+    explorer.exe .
+
 """
 
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from datetime import datetime, timedelta
-import mysql.connector
-import random
 from datetime import datetime, timedelta
 from pipeline.main import full_pipeline
 
